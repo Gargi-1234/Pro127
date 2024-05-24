@@ -14,12 +14,12 @@ browser = webdriver.Chrome()
 browser.get(START_URL)
 
  
-def scrape(hyperlink):
+def scrape():
     
-    page = requests.get(hyperlink)
-    soup = BeautifulSoup(page.content,"html.parser")        
+    # page = requests.get()
+    # soup = BeautifulSoup(page.content,"html.parser")      
+    soup = BeautifulSoup(browser.page_source, "html.parser")  
 
-# <table class="wikitable sortable jquery-tablesorter" style="text-align:center">
     field_brown_star_table = soup.find("table", attrs={"class","wikitable sortable jquery-tablesorter"})
     table_body = field_brown_star_table.find('tbody')
     table_body = table_body.find_all('tr')
@@ -37,7 +37,7 @@ def scrape(hyperlink):
             temp_list.append(data)
         scraped_data.append(temp_list)
 
-scrape(START_URL)
+scrape()
 
 stars_data = []
 # print(scraped_data)
@@ -54,7 +54,4 @@ for i in range(0, len(scraped_data)):
 header = ['Star_names', 'Distance', 'Mass', 'Radius']
 stars_df_1 = pd.DataFrame(stars_data, columns=header)
 
-stars_df_1.to_csv('latest_scraped_data.csv',index=True, index_label="id")
-
-
-
+stars_df_1.to_csv('scraped_data.csv',index=True, index_label="id")
